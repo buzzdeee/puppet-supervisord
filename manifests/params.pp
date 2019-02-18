@@ -8,6 +8,10 @@ class supervisord::params {
     'RedHat': {
       $unix_socket_group = 'nobody'
       $install_init      = true
+      $run_path          = '/var/run'
+      $config_include    = '/etc/supervisor.d'
+      $package_provider  = 'pip'
+      $group             = 'root'
       case $::operatingsystem {
         'Amazon': {
           $init_type              = 'init'
@@ -39,6 +43,21 @@ class supervisord::params {
       $unix_socket_group = 'nobody'
       $install_init      = true
       $executable_path   = '/usr/local/bin'
+      $run_path          = '/var/run'
+      $config_include    = '/etc/supervisor.d'
+      $package_provider  = 'pip'
+      $group             = 'root'
+    }
+    'OpenBSD': {
+      $init_type         = 'openbsd'
+      $init_defaults     = false
+      $unix_socket_group = 'nogroup'
+      $install_init      = false
+      $executable_path   = '/usr/local/bin'
+      $run_path          = '/var/run/supervisor'
+      $config_include    = '/etc/supervisord.d'
+      $package_provider  = 'openbsd'
+      $group             = 'wheel'
     }
     'Debian': {
       case $::operatingsystem {
@@ -71,12 +90,20 @@ class supervisord::params {
       $unix_socket_group = 'nogroup'
       $install_init      = true
       $executable_path   = '/usr/local/bin'
+      $run_path          = '/var/run'
+      $config_include    = '/etc/supervisor.d'
+      $package_provider  = 'pip'
+      $group             = 'root'
     }
     default:  {
       $init_defaults     = false
       $unix_socket_group = 'nogroup'
       $install_init      = false
       $executable_path   = '/usr/local/bin'
+      $run_path          = '/var/run'
+      $config_include    = '/etc/supervisor.d'
+      $package_provider  = 'pip'
+      $group             = 'root'
     }
   }
 
@@ -91,7 +118,6 @@ class supervisord::params {
 
   # default supervisord params
   $package_ensure          = 'installed'
-  $package_provider        = 'pip'
   $package_install_options = undef
   $service_manage          = true
   $service_ensure          = 'running'
@@ -105,7 +131,6 @@ class supervisord::params {
   $scl_enabled             = false
   $scl_script              = '/opt/rh/python27/enable'
 
-  $run_path                = '/var/run'
   $pid_file                = 'supervisord.pid'
   $log_path                = '/var/log/supervisor'
   $log_file                = 'supervisord.log'
@@ -117,7 +142,6 @@ class supervisord::params {
   $minprocs                = '200'
   $umask                   = '022'
   $manage_config           = true
-  $config_include          = '/etc/supervisor.d'
   $config_file             = '/etc/supervisord.conf'
   $config_file_mode        = '0644'
   $setuptools_url          = 'https://bootstrap.pypa.io/ez_setup.py'
@@ -144,5 +168,4 @@ class supervisord::params {
   $inet_username           = undef
   $inet_password           = undef
   $user                    = 'root'
-  $group                   = 'root'
 }
